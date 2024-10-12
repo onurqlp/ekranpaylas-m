@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Basit Ekran Paylaşımı">
+    <title>Ekran Paylaşımı</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #282c34;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        button {
+            background-color: #61dafb;
+            color: #282c34;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #21a1f1;
+        }
+        video {
+            width: 80%;
+            border: 2px solid #61dafb;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ekran Paylaşımı</h1>
+    <button id="startShareBtn">Ekran Paylaşımını Başlat</button>
+    <video id="screenVideo" autoplay playsinline></video>
+
+    <script>
+        const startShareBtn = document.getElementById('startShareBtn');
+        const screenVideo = document.getElementById('screenVideo');
+
+        // Ekran paylaşımını başlatma fonksiyonu
+        async function startScreenShare() {
+            try {
+                // Tarayıcıdan ekran paylaşımı başlatılır
+                const screenStream = await navigator.mediaDevices.getDisplayMedia({
+                    video: true
+                });
+                
+                // Video elementine stream'i atama
+                screenVideo.srcObject = screenStream;
+
+                // Ekran paylaşımı durdurulursa video elementini temizleyelim
+                screenStream.getVideoTracks()[0].addEventListener('ended', () => {
+                    screenVideo.srcObject = null;
+                    alert('Ekran paylaşımı sona erdi.');
+                });
+
+            } catch (err) {
+                console.error("Ekran paylaşımı başlatılamadı:", err);
+                alert("Ekran paylaşımı başlatılamadı.");
+            }
+        }
+
+        // Butona tıklandığında ekran paylaşımı başlat
+        startShareBtn.addEventListener('click', startScreenShare);
+    </script>
+</body>
+</html>
